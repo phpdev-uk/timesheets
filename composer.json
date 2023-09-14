@@ -3,6 +3,11 @@
     "description": "Scripts for managing timesheets",
     "type": "project",
     "license": "MIT",
+    "config": {
+        "platform": {
+            "php": "8.1.2"
+        }
+    },
     "autoload": {
         "psr-4": {
             "PhpdevUk\\Timesheets\\": "src/"
@@ -14,5 +19,7 @@
             "email": "paul@phpdeveloper.org.uk"
         }
     ],
-    "require": {}
+    "require": {
+        "symfony/console": "^6.3"
+    }
 }
