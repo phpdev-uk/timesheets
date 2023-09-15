@@ -103,6 +103,7 @@ $application
         $totalHours = array_sum(array_column($workChunks, 'hours'));
         $totalMinutes = array_sum(array_column($workChunks, 'minutes'));
 
+        // Convert minutes to hours
         while ($totalMinutes >= 60) {
             $totalHours++;
             $totalMinutes -= 60;
