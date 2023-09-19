@@ -31,17 +31,26 @@ $application
         'start-date',
         'start',
         InputOption::VALUE_REQUIRED,
-        'Start Date (inclusive)'
+        'Start Date (inclusive)',
+        '2000-01-01'
     )
     ->addOption(
         'end-date',
         'end',
         InputOption::VALUE_REQUIRED,
-        'End Date (inclusive)'
+        'End Date (inclusive)',
+        '2100-01-01'
     )
     ->setCode(function (InputInterface $input, OutputInterface $output): int {
         $clientNameFilter = $input->getArgument('client');
         $files = $input->getArgument('files');
+        $startDateFilter = $input->getOption('start-date');
+        $endDateFilter = $input->getOption('end-date');
+
+        $startDateTimeFilter = new DateTimeImmutable($startDateFilter . ' 00:00:00');
+        $endDateTimeFilter = new DateTimeImmutable($endDateFilter . ' 00:00:00');
+        // Add one day to end date to include the whole day
+        $endDateTimeFilter = $endDateTimeFilter->modify('+1 day');
 
         $workChunks = [];
 
@@ -85,15 +94,17 @@ $application
                         $startDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT, "$date $startTime");
                         $endDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT, "$date $endTime");
 
-                        $diff = $startDateTime->diff($endDateTime);
+                        if ($startDateTime >= $startDateTimeFilter && $startDateTime < $endDateTimeFilter) {
+                            $diff = $startDateTime->diff($endDateTime);
 
-                        $workChunks[] = [
-                            'hours' => $diff->h,
-                            'minutes' => $diff->i,
-                        ];
+                            $workChunks[] = [
+                                'hours' => $diff->h,
+                                'minutes' => $diff->i,
+                            ];
 
-                        if ($output->isVerbose()) {
-                            $output->writeln("{$diff->h}h{$diff->i}m");
+                            if ($output->isVerbose()) {
+                                $output->writeln("{$diff->h}h{$diff->i}m");
+                            }
                         }
                     }
                 }
