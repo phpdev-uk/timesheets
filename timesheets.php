@@ -13,7 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-const DATE_TIME_FORMAT = 'd/m/Y H:i:s A';
+const DATE_TIME_FORMAT_OLD = 'd/m/Y H:i:s A';
+const DATE_TIME_FORMAT_NEW = 'd/m/Y H:i:s';
 
 $application = new Application();
 
@@ -91,8 +92,16 @@ $application
                         $startTime = $sheet->getCell("B{$row}")->getFormattedValue();
                         $endTime = $sheet->getCell("C{$row}")->getFormattedValue();
 
-                        $startDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT, "$date $startTime");
-                        $endDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT, "$date $endTime");
+                        $startDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT_OLD, "$date $startTime");
+                        $endDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT_OLD, "$date $endTime");
+
+                        if ($startDateTime === false) {
+                            $startDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT_NEW, "$date $startTime");
+                        }
+
+                        if ($endDateTime === false) {
+                            $endDateTime = DateTimeImmutable::createFromFormat(DATE_TIME_FORMAT_NEW, "$date $endTime");
+                        }
 
                         if ($startDateTime >= $startDateTimeFilter && $startDateTime < $endDateTimeFilter) {
                             $diff = $startDateTime->diff($endDateTime);
