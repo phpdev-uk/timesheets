@@ -22,6 +22,6 @@
     "require": {
         "symfony/console": "^6.3",
         "symfony/var-dumper": "^6.3",
-        "phpoffice/phpspreadsheet": "^1.29"
+        "phpoffice/phpspreadsheet": "^3"
     }
 }
