@@ -17,7 +17,7 @@ class ReadFilter implements IReadFilter
         $this->endColumn = $endColumn;
     }
 
-    public function readCell($columnAddress, $row, $worksheetName = '')
+    public function readCell(string $columnAddress, int $row, string $worksheetName = ''): bool
     {
         return in_array($columnAddress, range($this->startColumn, $this->endColumn));
     }
